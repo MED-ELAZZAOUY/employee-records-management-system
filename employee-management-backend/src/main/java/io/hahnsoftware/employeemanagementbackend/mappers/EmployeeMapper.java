@@ -48,7 +48,7 @@ public class EmployeeMapper {
         return builder.build();
     }
 
-    private static Address parseAddress(String addressString) {
+    public static Address parseAddress(String addressString) {
         if (addressString == null || addressString.isEmpty()) return null;
         String[] parts = addressString.split(", ");
 
