@@ -22,7 +22,7 @@ public class Initializer {
     }
 
     @Bean
-    public CommandLineRunner createRolesAndAdmin(UserRepository userRepository, RoleRepository roleRepository) {
+    public CommandLineRunner createRolesAndUsers(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
             if (roleRepository.findByRoleName(RoleName.ADMIN).isEmpty()) {
                 Role adminRole = Role.builder()
@@ -31,20 +31,67 @@ public class Initializer {
                 roleRepository.save(adminRole);
             }
 
+            if (roleRepository.findByRoleName(RoleName.HR).isEmpty()) {
+                Role hrRole = Role.builder()
+                        .roleName(RoleName.HR)
+                        .build();
+                roleRepository.save(hrRole);
+            }
+
+            if (roleRepository.findByRoleName(RoleName.MANAGER).isEmpty()) {
+                Role managerRole = Role.builder()
+                        .roleName(RoleName.MANAGER)
+                        .build();
+                roleRepository.save(managerRole);
+            }
+
+
             if (userRepository.findByEmail("admin@admin.com").isEmpty()) {
-                List<Role> roles = List.of(roleRepository.findByRoleName(RoleName.ADMIN).get());
+                Role adminRole = roleRepository.findByRoleName(RoleName.ADMIN).get();
 
                 User adminUser = User.builder()
-                        .fullName("Admin")
+                        .fullName("Admin User")
                         .email("admin@admin.com")
                         .password(passwordEncoder.encode("admin123@@"))
-                        .roles(roles)
+                        .roles(List.of(adminRole))
                         .build();
 
                 userRepository.save(adminUser);
                 System.out.println("Admin user created: admin@admin.com / admin123@@");
             } else {
                 System.out.println("Admin user already exists.");
+            }
+
+            if (userRepository.findByEmail("hr@hr.com").isEmpty()) {
+                Role hrRole = roleRepository.findByRoleName(RoleName.HR).get();
+
+                User hrUser = User.builder()
+                        .fullName("HR User")
+                        .email("hr@hr.com")
+                        .password(passwordEncoder.encode("hr123@@"))
+                        .roles(List.of(hrRole))
+                        .build();
+
+                userRepository.save(hrUser);
+                System.out.println("HR user created: hr@hr.com / hr123@@");
+            } else {
+                System.out.println("HR user already exists.");
+            }
+
+            if (userRepository.findByEmail("manager@manager.com").isEmpty()) {
+                Role managerRole = roleRepository.findByRoleName(RoleName.MANAGER).get();
+
+                User managerUser = User.builder()
+                        .fullName("Manager User")
+                        .email("manager@manager.com")
+                        .password(passwordEncoder.encode("manager123@@"))
+                        .roles(List.of(managerRole))
+                        .build();
+
+                userRepository.save(managerUser);
+                System.out.println("Manager user created: manager@manager.com / manager123@@");
+            } else {
+                System.out.println("Manager user already exists.");
             }
         };
     }
