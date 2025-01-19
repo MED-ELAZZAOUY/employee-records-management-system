@@ -15,5 +15,5 @@ public interface EmployeeService {
 
     void deleteEmployee(Long id) throws EmployeeNotFoundException;
 
-    List<EmployeeDto> getAllEmployees();
+    List<EmployeeDto> getAllEmployees(int page, int size);
 }
