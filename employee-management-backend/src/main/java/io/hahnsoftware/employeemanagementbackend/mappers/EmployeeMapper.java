@@ -1,5 +1,6 @@
 package io.hahnsoftware.employeemanagementbackend.mappers;
 
+import io.hahnsoftware.employeemanagementbackend.dtos.AddressDto;
 import io.hahnsoftware.employeemanagementbackend.dtos.EmployeeDto;
 import io.hahnsoftware.employeemanagementbackend.entities.Address;
 import io.hahnsoftware.employeemanagementbackend.entities.Department;
@@ -7,7 +8,15 @@ import io.hahnsoftware.employeemanagementbackend.entities.Employee;
 import io.hahnsoftware.employeemanagementbackend.enums.EmploymentStatus;
 
 public class EmployeeMapper {
-    public static EmployeeDto toDto(Employee employee) {
+    public static EmployeeDto mapToDto(Employee employee) {
+        AddressDto addressDto = AddressDto.builder()
+                .street(employee.getAddress().getStreet())
+                .city(employee.getAddress().getCity())
+                .state(employee.getAddress().getState())
+                .postalCode(employee.getAddress().getPostalCode())
+                .country(employee.getAddress().getCountry())
+                .build();
+
         return EmployeeDto.builder()
                 .id(employee.getId())
                 .employeeId(employee.getEmployeeId())
@@ -18,17 +27,18 @@ public class EmployeeMapper {
                 .employmentStatus(employee.getEmploymentStatus().name())
                 .email(employee.getEmail())
                 .phoneNumber(employee.getPhoneNumber())
-                .address(String.format("%s, %s, %s, %s, %s",
-                        employee.getAddress().getStreet(),
-                        employee.getAddress().getCity(),
-                        employee.getAddress().getState(),
-                        employee.getAddress().getPostalCode(),
-                        employee.getAddress().getCountry()))
+                .address(addressDto)
                 .build();
     }
 
     public static Employee mapToEntity(EmployeeDto employeeDto, Department department) {
-        Address address = parseAddress(employeeDto.getAddress());
+        Address address = Address.builder()
+                .street(employeeDto.getAddress().getStreet())
+                .city(employeeDto.getAddress().getCity())
+                .state(employeeDto.getAddress().getState())
+                .postalCode(employeeDto.getAddress().getPostalCode())
+                .country(employeeDto.getAddress().getCountry())
+                .build();
 
         Employee.EmployeeBuilder builder = Employee.builder()
                 .employeeId(employeeDto.getEmployeeId())
@@ -46,18 +56,5 @@ public class EmployeeMapper {
         }
 
         return builder.build();
-    }
-
-    public static Address parseAddress(String addressString) {
-        if (addressString == null || addressString.isEmpty()) return null;
-        String[] parts = addressString.split(", ");
-
-        return Address.builder()
-                .street(parts[0])
-                .city(parts[1])
-                .state(parts[2])
-                .postalCode(parts[3])
-                .country(parts[4])
-                .build();
     }
 }

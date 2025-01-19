@@ -1,5 +1,6 @@
 package io.hahnsoftware.employeemanagementbackend.dtos;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class EmployeeDto {
     @NotBlank(message = "Phone number is required and cannot be blank")
     @Size(min = 10, max = 15, message = "Phone number should be between 10 and 15 digits")
     private String phoneNumber;
-    @NotBlank(message = "Address is required and cannot be blank")
-    private String address;
+    @NotNull(message = "Address is required and cannot be null")
+    @Valid
+    private AddressDto address;
 }

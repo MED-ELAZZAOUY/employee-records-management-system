@@ -32,14 +32,14 @@ public class EmployeeServiceImp implements EmployeeService {
 
         Employee employee = EmployeeMapper.mapToEntity(employeeDto, department);
         Employee savedEmployee = employeeRepository.save(employee);
-        return EmployeeMapper.toDto(savedEmployee);
+        return EmployeeMapper.mapToDto(savedEmployee);
     }
 
     @Override
     public EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        return EmployeeMapper.toDto(employee);
+        return EmployeeMapper.mapToDto(employee);
     }
 
     @Override
@@ -58,9 +58,13 @@ public class EmployeeServiceImp implements EmployeeService {
         existingEmployee.setEmploymentStatus(EmploymentStatus.valueOf(employeeDto.getEmploymentStatus()));
         existingEmployee.setEmail(employeeDto.getEmail());
         existingEmployee.setPhoneNumber(employeeDto.getPhoneNumber());
-        existingEmployee.setAddress(EmployeeMapper.parseAddress(employeeDto.getAddress()));
+        existingEmployee.getAddress().setStreet(employeeDto.getAddress().getStreet());
+        existingEmployee.getAddress().setCity(employeeDto.getAddress().getCity());
+        existingEmployee.getAddress().setState(employeeDto.getAddress().getState());
+        existingEmployee.getAddress().setPostalCode(employeeDto.getAddress().getPostalCode());
+        existingEmployee.getAddress().setCountry(employeeDto.getAddress().getCountry());
 
-        return EmployeeMapper.toDto(existingEmployee);
+        return EmployeeMapper.mapToDto(existingEmployee);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class EmployeeServiceImp implements EmployeeService {
     public List<EmployeeDto> getAllEmployees() {
         return employeeRepository.findAll()
                 .stream()
-                .map(EmployeeMapper::toDto)
+                .map(EmployeeMapper::mapToDto)
                 .toList();
     }
 }
