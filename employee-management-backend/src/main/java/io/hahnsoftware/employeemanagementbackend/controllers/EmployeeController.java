@@ -47,8 +47,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EmployeeDto>>> getAllEmployees() {
-        List<EmployeeDto> employees = employeeService.getAllEmployees();
+    public ResponseEntity<ApiResponse<List<EmployeeDto>>> getAllEmployees(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        List<EmployeeDto> employees = employeeService.getAllEmployees(page, size);
         return ResponseEntity.ok(new ApiResponse<>("Employees fetched successfully", employees));
     }
 }

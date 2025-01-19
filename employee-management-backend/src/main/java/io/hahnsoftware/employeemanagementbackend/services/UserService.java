@@ -15,5 +15,5 @@ public interface UserService {
 
     UserDto getUser(Long id) throws UserNotRoundException;
 
-    List<UserDto> getAllUsers();
+    List<UserDto> getAllUsers(int page, int size);
 }

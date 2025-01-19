@@ -10,6 +10,7 @@ import io.hahnsoftware.employeemanagementbackend.exceptions.UserNotRoundExceptio
 import io.hahnsoftware.employeemanagementbackend.repositories.RoleRepository;
 import io.hahnsoftware.employeemanagementbackend.repositories.UserRepository;
 import io.hahnsoftware.employeemanagementbackend.services.UserService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -96,8 +97,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
+    public List<UserDto> getAllUsers(int page, int size) {
+        return userRepository.findAll(PageRequest.of(page, size)).stream()
                 .map(user -> UserDto.builder()
                         .fullName(user.getFullName())
                         .email(user.getEmail())

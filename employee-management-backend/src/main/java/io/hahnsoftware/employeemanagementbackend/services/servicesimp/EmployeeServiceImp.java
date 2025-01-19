@@ -11,6 +11,7 @@ import io.hahnsoftware.employeemanagementbackend.repositories.DepartmentReposito
 import io.hahnsoftware.employeemanagementbackend.repositories.EmployeeRepository;
 import io.hahnsoftware.employeemanagementbackend.services.EmployeeService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,8 +76,8 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> getAllEmployees() {
-        return employeeRepository.findAll()
+    public List<EmployeeDto> getAllEmployees(int page, int size) {
+        return employeeRepository.findAll(PageRequest.of(page, size))
                 .stream()
                 .map(EmployeeMapper::mapToDto)
                 .toList();

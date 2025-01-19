@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers() {
-        List<UserDto> users = userService.getAllUsers();
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        List<UserDto> users = userService.getAllUsers(page, size);
         return ResponseEntity.ok(new ApiResponse<>("Users fetched successfully", users));
     }
 }
